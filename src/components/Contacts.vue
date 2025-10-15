@@ -1,7 +1,7 @@
 <template>
 	<section id="contact">	
     	<div class="container-fluid justify-content-center text-center my-5" id="contacts">
-    		<h2 id="section-titles" class="mt-5 pt-5">Contact</h2>
+    		<h2 id="contact" class="mt-5 pt-5">Contact</h2>
 				  <div class="row">
 					<div class="col-md-6 mb-4">
 						<!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d61762.5330839029!2d121.06342378804648!3d14.646952920341842!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b9a2777a00f9%3A0x6d36c8f429a12fc6!2sMarikina%2C%20Metro%20Manila!5e0!3m2!1sen!2sph!4v1751528385994!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
@@ -42,6 +42,14 @@
 							<div class="text-md-end text-center">
 								<button type="submit" class="submit-btn pl-5 pr-5" :disabled="isLoading" id="button-contact">{{ isLoading? "Sending..." : "Submit" }}</button>
 						  </div>
+
+						  <!-- Recaptcha checkbox -->
+						  <div class="d-flex justify-content-end mt-2">
+						  	<div ref="recaptchaContainer"></div>
+						  </div>
+
+
+
 						</form>
 					</div>
 				</div>
@@ -50,7 +58,7 @@
 </template>
 
 <script setup>
-	import { ref } from "vue";
+	import { ref, onMounted, onBeforeUnmount } from "vue";
 
 	import { Notyf } from "notyf";
 	import 'notyf/notyf.min.css';
@@ -67,6 +75,12 @@
 	const isLoading = ref(false);
 
 	const submitForm = async () => {
+
+		if(!recaptchaToken.value) {
+			notyf.error('Please verify that you are not a Robot.')
+			return;
+		}
+
 		isLoading.value = true;
 		try {
 			const response = await fetch(" https://api.web3forms.com/submit", {
@@ -94,7 +108,55 @@
 			console.log(error)
 			isLoading.value = false;
 			notyf.error("Failed to send message");
+		} finally {
+			resetRecaptcha()
 		}
 	}
 
+	const SITE_KEY = '6LdkrOsrAAAAAHIKmnzDRNOQf_ONmFWwl6K2310c'
+
+	const recaptchaContainer = ref(null);
+	const recaptchaWidgetId = ref(null);
+	const recaptchaToken = ref('');
+
+	function onRecaptchaSuccess(token) {
+		recaptchaToken.value = token;
+	}
+
+	function onRecaptchaExpired() {
+		recaptchaToken.value = '';
+	}
+
+	function renderRecaptcha() {
+		if (!window.grecaptcha) {
+			console.error('reCAPTCHA not loaded');
+			return
+		}
+
+		recaptchaWidgetId.value = window.grecaptcha.render(recaptchaContainer.value, {
+				sitekey: SITE_KEY,
+				size: 'normal',
+				callback: onRecaptchaSuccess,
+				'expired-callback':onRecaptchaExpired,
+			});
+	}
+
+	function resetRecaptcha() {
+		if (recaptchaWidgetId.value !== null) {
+			window.grecaptcha.reset(recaptchaWidgetId.value)
+			recaptchaToken.value = '';
+		}
+	}
+
+	onMounted(() => {
+		const interval = setInterval(() => {
+			if(window.grecaptcha && window.grecaptcha.render) {
+				renderRecaptcha();
+				clearInterval(interval)
+			}
+		}, 100)
+		onBeforeUnmount(() => {
+			clearInterval(interval);
+		})
+	})
 </script>
