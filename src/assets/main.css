@@ -1,35 +1,108 @@
-@import './base.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+/*#nav-bar {
+  background: #4b7bf5;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+.nav-link {
+  font-family: Montserrat;
+  font-weight: 700 !important;
+  font-size: 18px !important;
+  line-height: 100% !important;
+  padding: 0 20px !important;
+  color: #FFFFFF;
+}*/
+
+.fixed-image {
+    /*uncomment below once done with the actvity and use router-view on the app.vue*/ 
+    /*position: fixed; 
+    z-index: 1000;*/          
+  top: 600%;              
+  right: 40%;                 
+  transform: translateY(-50%); 
+  max-width: 250px;             
+  height: auto;
+  object-fit: cover;
+            
+}
+#landing {
+    background:    
+        linear-gradient(
+        /*rgba(0, 34, 65, 0.61),*/
+        rgba(0, 34, 65, 0.61)
+    ),
+    url("./images/bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;  
+  background-attachment: fixed;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+/*#my-name {
+    font-family: Montserrat;
+    font-weight: 600;
+    font-size: 56px;
+    line-height: 72px;
+    letter-spacing: -2%;
+    vertical-align: bottom;
+    color: #FFFFFF;
+}*/
+
+#my-job {
+    font-family: Montserrat;
+    font-weight: 600;
+    font-size: 32px;
+    vertical-align: bottom;
+    color: #FFFFFF;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+#landing p {
+    font-family: Montserrat;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 30px;
+    /*color: #000000;*/
+   /* padding: 10px;
+    background-color: #ffffff;*/ /* pure white */
+  /* optional: sets text color for contrast */
+/*    width: 40vw;
+    height: 20vh;*/
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+/*section img {
+    border-radius: 10px;
+}
+
+.shadow {
+    border-radius: 10px;
+}
+
+#t-gallery, #para{
+    color: darkblue;
+    padding: 10px;
+    text-align: left;
+}
+
+#projects, #contacts{
+    background: #b2dbf5;
+}
+*/
+#button-contact {
+    border-radius: 20px;
+    background: #1E90FF;
+    border-color: #4169E1;
+    color: #FFFFFF;
+}
+
+footer {
+    background: #0041C2;
+    color: #FFFFFF;
+    font-family: Montserrat;
+    font-weight: 400;
+}
+
+#section-titles {
+    color: darkblue;
+    font-family: Montserrat;
+    font-weight: 700;
+
 }
